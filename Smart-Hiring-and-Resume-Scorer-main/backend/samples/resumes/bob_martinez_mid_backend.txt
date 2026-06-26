@@ -1,0 +1,30 @@
+Bob Martinez
+bob.martinez@gmail.com | (212) 555-0456
+
+OBJECTIVE
+Mid-level backend developer seeking senior engineering role. 4 years experience in web development with Python and JavaScript.
+
+WORK HISTORY
+
+Backend Developer — WebAgency Co (2022 - Present)
+- Built REST APIs using Django REST Framework for client projects
+- Worked with PostgreSQL databases and wrote SQL queries
+- Deployed applications to AWS EC2 instances
+- Used Docker for local development environments
+- Participated in Agile sprint planning and daily standups
+
+Junior Developer — FreelanceProjects.io (2020 - 2022)
+- Developed Python scripts for data processing and automation
+- Built Flask web applications for small business clients
+- Maintained MySQL databases
+- Used Git for version control
+
+TECHNICAL SKILLS
+Python, Django, Flask, JavaScript, PostgreSQL, MySQL, Docker, AWS EC2, Git, Linux, REST APIs
+
+EDUCATION
+B.S. Information Technology — State University, 2020
+
+PROJECTS
+Personal Blog Platform - Built with Django and PostgreSQL, deployed on AWS
+Price Tracker - Python scraper with Redis caching

@@ -1,0 +1,45 @@
+David Wong
+david.wong2002@gmail.com
+
+OBJECTIVE
+Recent computer science graduate seeking entry-level software engineering position. Eager to learn and grow in a fast-paced environment.
+
+EDUCATION
+B.S. Computer Science — California State University, Sacramento
+Graduated: May 2024
+GPA: 3.2
+
+PROJECTS
+
+Personal Finance Tracker (2024)
+• Built a web app using Python Flask and SQLite
+• Used HTML, CSS, JavaScript for frontend
+• Deployed on Heroku
+
+Sorting Algorithm Visualizer (2023)
+• Created interactive visualization using React
+• Implemented 8 sorting algorithms in JavaScript
+
+Machine Learning Class Project (2023)
+• Applied scikit-learn for classification problem
+• Achieved 87% accuracy on test dataset
+
+INTERNSHIP
+Software Intern — TechStartup, Sacramento CA
+Summer 2023 (3 months)
+• Assisted senior engineers with bug fixes in Python codebase
+• Wrote basic unit tests
+• Learned Git workflows
+
+TECHNICAL SKILLS
+• Python (beginner-intermediate)
+• JavaScript, React (beginner)
+• SQL (basic)
+• HTML, CSS
+• Git
+• Some experience with AWS S3 (from tutorials)
+• Basic Docker knowledge
+
+ACTIVITIES
+• Member of CS Club
+• Participated in 2 hackathons

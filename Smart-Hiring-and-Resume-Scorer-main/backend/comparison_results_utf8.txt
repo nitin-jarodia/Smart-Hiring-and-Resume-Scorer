@@ -1,0 +1,235 @@
+﻿[OK] Recruiter authenticated
+[OK] Job created: cb5313f2-551e-4a0b-a062-b5857a7ff101
+[OK] Uploaded fraud: resume_id=b83295e5-ad47-4094-9efa-972a752ad4de
+[OK] Uploaded low_quality: resume_id=20fcbf30-707b-4c00-8ffd-53a02098b53a
+[OK] Uploaded perfect: resume_id=15650749-2bbf-4e15-9174-33a9ff53ef2e
+[OK] Screening initiated: 200
+
+======================================================================
+                 SCREENERIAI RESUME COMPARISON REPORT                 
+======================================================================
+
+
+--- CANDIDATE:  | filename: perfect_resume_test.pdf ---
+  SCORE         : 64.1/100
+  SENIORITY     : Mid
+  MATCHED SKILLS: ['git', 'fastapi', 'docker', 'python']
+  FRAUD FLAGS   : 0 flag(s)
+  EVIDENCE SNIPPETS: 5 found
+  RECOMMENDATIONS (6):
+    - If you have experience with aws, consider adding it with specific examples and metrics to your resum
+    - If you have experience with rest apis, consider adding it with specific examples and metrics to your
+    - If you have experience with postgresql, consider adding it with specific examples and metrics to you
+  PROJECTS EVALUATED: 1
+    [PROJ] ? -> Grade: ?
+  EXPLANATION   : This candidate shows moderate alignment with this role (score: 64/100). Estimated seniority: Mid. Key matched skills: git, fastapi, docker, python. Notable gaps: aws, rest apis, postgresql, ci/cd. Sem
+
+
+--- CANDIDATE:  | filename: fraud_resume_test.pdf ---
+  SCORE         : 40.3/100
+  SENIORITY     : Senior
+  MATCHED SKILLS: ['python']
+  FRAUD FLAGS   : 1 flag(s)
+    [!] [High] Unrealistic experience claimed: 10 years with chatgpt (technology is newer than claimed experience).
+  EVIDENCE SNIPPETS: 2 found
+  RECOMMENDATIONS (6):
+    - If you have experience with git, consider adding it with specific examples and metrics to your resum
+    - If you have experience with docker, consider adding it with specific examples and metrics to your re
+    - If you have experience with fastapi, consider adding it with specific examples and metrics to your r
+  PROJECTS EVALUATED: 1
+    [PROJ] ? -> Grade: ?
+  EXPLANATION   : This candidate shows limited alignment with this role (score: 40/100). Estimated seniority: Senior. Key matched skills: python. Notable gaps: git, docker, fastapi, rest apis, ci/cd. Semantic relevance
+
+
+--- CANDIDATE:  | filename: low_quality_resume_test.pdf ---
+  SCORE         : 35.9/100
+  SENIORITY     : Intern/Entry
+  MATCHED SKILLS: ['python']
+  FRAUD FLAGS   : 1 flag(s)
+    [!] [High] Suspiciously high skill density (8 skills in 43 words). Possible keyword stuffing or hidden text.
+  RED FLAGS     :
+    [RED] Very limited resume content detected
+  EVIDENCE SNIPPETS: 2 found
+  RECOMMENDATIONS (6):
+    - If you have experience with git, consider adding it with specific examples and metrics to your resum
+    - If you have experience with docker, consider adding it with specific examples and metrics to your re
+    - If you have experience with fastapi, consider adding it with specific examples and metrics to your r
+  PROJECTS EVALUATED: 1
+    [PROJ] ? -> Grade: ?
+  EXPLANATION   : This candidate shows limited alignment with this role (score: 36/100). Estimated seniority: Intern/Entry. Key matched skills: python. Notable gaps: git, docker, fastapi, rest apis, ci/cd. Semantic rel
+
+
+
+--- RAW JSON (for analysis) ---
+[
+  {
+    "id": "998c44a4-ce76-44e9-b95c-b5cf3849499e",
+    "job_id": "cb5313f2-551e-4a0b-a062-b5857a7ff101",
+    "resume_id": "15650749-2bbf-4e15-9174-33a9ff53ef2e",
+    "score": 64.1,
+    "confidence": 0.44,
+    "seniority": "Mid",
+    "breakdown": {
+      "semantic_similarity": 66.4,
+      "skill_match": 50.0,
+      "experience_alignment": 80.0,
+      "education_alignment": 70,
+      "formatting_clarity": 90,
+      "weights": {
+        "semantic_similarity": 0.4,
+        "skill_match": 0.35,
+        "experience_alignment": 0.15,
+        "education_alignment": 0.05,
+        "formatting_clarity": 0.05
+      }
+    },
+    "evidence": [
+      {
+        "skill": "git",
+        "excerpt": "Top Developer Resume (High Score Test)\nContact\nEmail: top.dev@example.com | GitHub: https://github.com/topdev\nSummary\nSoftware engineer specializing in AI systems, backend APIs, and scalable ML pipelines.",
+        "type": "skill_match"
+      },
+      {
+        "skill": "fastapi",
+        "excerpt": "Skills\n1\nPython\n2\nMachine Learning\n3\nSQL\n4\nFastAPI\n5\nDocker\n6\nKubernetes\n7\nCloud\n8\nData Analysis\nEducation\nB.Tech Computer Science \u2013 IIIT Surat (2022\u20132026)\nProjects\n1\nAI Resume Screening Platform using sentence-transformers and FastAPI\n2\nCustomer chu",
+        "type": "skill_match"
+      },
+      {
+        "skill": "docker",
+        "excerpt": "Skills\n1\nPython\n2\nMachine Learning\n3\nSQL\n4\nFastAPI\n5\nDocker\n6\nKubernetes\n7\nCloud\n8\nData Analysis\nEducation\nB.Tech Computer Science \u2013 IIIT Surat (2022\u20132026)\nProjects\n1\nAI Resume Screening Platform using sentence-transformers and FastAPI\n2\nCustomer chu",
+        "type": "skill_match"
+      },
+      {
+        "skill": "python",
+        "excerpt": "Skills\n1\nPython\n2\nMachine Learning\n3\nSQL\n4\nFastAPI\n5\nDocker\n6\nKubernetes\n7\nCloud\n8\nData Analysis\nEducation\nB.Tech Computer Science \u2013 IIIT Surat (2022\u20132026)\nProjects\n1\nAI Resume Screening Platform using sentence-transformers and FastAPI\n2\nCustomer chu",
+        "type": "skill_match"
+      },
+      {
+        "skill": "semantic_match",
+        "excerpt": "Top Developer Resume (High Score Test) Contact Email: top.dev@example.com | GitHub: https://github.com/topdev Summary Software engineer specializing in AI systems, backend APIs, and scalable ML pipelines. Skills 1 Python 2 Machine Learning 3 SQL 4 Fa",
+        "type": "semantic_relevance",
+        "score": 57.2
+      }
+    ],
+    "matched_skills": [
+      "git",
+      "fastapi",
+      "docker",
+      "python"
+    ],
+    "missing_skills": [
+      "aws",
+      "rest apis",
+      "postgresql",
+      "ci/cd"
+    ],
+    "nice_to_have_found": [],
+    "red_flags": [],
+    "recommendations": [
+      "If you have experience with aws, consider adding it with specific examples and metrics to your resume.",
+      "If you have experience with rest apis, consider adding it with specific examples and metrics to your resume.",
+      "If you have experience with postgresql, consider adding it with specific examples and metrics to your resume.",
+      "If you have experience with ci/cd, consider adding it with specific examples and metrics to your resume.",
+      "Optimize for ATS: use exact keywords from the job description in context throughout your resume.",
+      "Ensure skills section uses exact terminology from the job posting."
+    ],
+    "interview_questions": [
+      {
+        "question": "Can you describe your experience with aws or similar technologies? How would you approach learning it quickly?",
+        "focus_area": "Skill gap: aws",
+        "good_answer_signal": "Candidate demonstrates adaptability, shows related experience, or presents a concrete learning plan for aws."
+      },
+      {
+        "question": "Can you describe your experience with rest apis or similar technologies? How would you approach learning it quickly?",
+        "focus_area": "Skill gap: rest apis",
+        "good_answer_signal": "Candidate demonstrates adaptability, shows related experience, or presents a concrete learning plan for rest apis."
+      },
+      {
+        "question": "Can you describe your experience with postgresql or similar technologies? How would you approach learning it quickly?",
+        "focus_area": "Skill gap: postgresql",
+        "good_answer_signal": "Candidate demonstrates adaptability, shows related experience, or presents a concrete learning plan for postgresql."
+      },
+      {
+        "question": "Describe a technically complex project you led end-to-end. What was your approach and outcome?",
+        "focus_area": "Technical depth & ownership",
+        "good_answer_signal": "Specific technical details, clear problem-solving approach, measurable outcomes, acknowledgment of tradeoffs."
+      },
+      {
+        "question": "Tell me about a time you disagreed with a technical decision. How did you handle it?",
+        "focus_area": "Collaboration & communication",
+        "good_answer_signal": "Constructive approach, data-driven arguments, ability to commit even when overruled."
+      }
+    ],
+    "project_evaluations": [
+      {
+        "project_name": "Unnamed Project",
+        "description_snippet": "Projects\n1\nAI Resume Screening Platform using sentence-transformers and FastAPI\n2\nCustomer churn prediction ML model achieving 88% accuracy\n3\nCloud\u25a0ba...",
+        "complexity_level": "Low",
+        "core_technologies": [
+          "docker",
+          "fastapi",
+          "hugging face",
+          "kubernetes",
+          "machine learning"
+        ],
+        "innovation_impact_score": 70,
+        "relevance_to_job": 22,
+        "suggestions": [
+          "If applicable, explicitly mention how this project utilized any of these job requirements: aws, ci/cd.",
+          "Clarify your specific role and leadership contributions in this project."
+        ]
+      }
+    ],
+    "fraud_flags": [],
+    "explanation": "This candidate shows moderate alignment with this role (score: 64/100). Estimated seniority: Mid. Key matched skills: git, fastapi, docker, python. Notable gaps: aws, rest apis, postgresql, ci/cd. Semantic relevance to job description: 66%. Skill keyword match: 50%. Experience alignment: 80%.",
+    "status": "pending",
+    "notes": "",
+    "tags": [],
+    "created_at": "2026-03-14T18:01:23",
+    "candidate_name": "",
+    "candidate_email": "top.dev@example.com",
+    "filename": "perfect_resume_test.pdf"
+  },
+  {
+    "id": "a1d4024c-7864-4aae-8c28-5bfab5a7b8e2",
+    "job_id": "cb5313f2-551e-4a0b-a062-b5857a7ff101",
+    "resume_id": "b83295e5-ad47-4094-9efa-972a752ad4de",
+    "score": 40.3,
+    "confidence": 0.2,
+    "seniority": "Senior",
+    "breakdown": {
+      "semantic_similarity": 36.1,
+      "skill_match": 12.5,
+      "experience_alignment": 100,
+      "education_alignment": 70,
+      "formatting_clarity": 60,
+      "weights": {
+        "semantic_similarity": 0.4,
+        "skill_match": 0.35,
+        "experience_alignment": 0.15,
+        "education_alignment": 0.05,
+        "formatting_clarity": 0.05
+      }
+    },
+    "evidence": [
+      {
+        "skill": "python",
+        "excerpt": "Fake Candidate Resume (Fraud Test)\nContact\nEmail: fake.gen@example.com | Phone: +91 9000000000\nSkills\n1\nPython\n2\nPython\n3\nPython\n4\nPython\n5\nMachine Learning\n6\nMachine Learning\n7\nMachine Learning\n8\nDeep Learning\n9\nDeep Learning\n10\nAI\n11\nAI\n12\nAI\n13\nAI",
+        "type": "skill_match"
+      },
+      {
+        "skill": "semantic_match",
+        "excerpt": "Fake Candidate Resume (Fraud Test) Contact Email: fake.gen@example.com | Phone: +91 9000000000 Skills 1 Python 2 Python 3 Python 4 Python 5 Machine Learning 6 Machine Learning 7 Machine Learning 8 Deep Learning 9 Deep Learning 10 AI 11 AI 12 AI 13 AI",
+        "type": "semantic_relevance",
+        "score": 32.3
+      }
+    ],
+    "matched_skills": [
+      "python"
+    ],
+    "missing_skills": [
+      "git",
+      "docker",
+      "fastapi",
+      "rest apis",
+      "ci/c

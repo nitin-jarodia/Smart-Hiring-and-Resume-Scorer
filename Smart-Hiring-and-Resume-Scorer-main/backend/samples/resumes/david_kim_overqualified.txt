@@ -1,0 +1,40 @@
+David Kim | david.kim@proton.me
+
+EXPERIENCE SUMMARY: 14 years of software engineering leadership experience.
+
+PROFESSIONAL EXPERIENCE
+
+Principal Engineer / Engineering Manager — MegaCorp Technologies (2018 - Present)
+- Architected distributed systems handling 500M requests/day across 50+ microservices
+- Built and managed 15-person platform engineering team
+- Designed event-driven architecture using Kafka, Kubernetes, and Python
+- Led migration to AWS from on-premise data centers, saving $3M annually
+- Defined engineering standards and architecture review process
+- Mentored 8 senior engineers who were promoted to staff level
+
+Staff Engineer — BigTech Inc (2015 - 2018)
+- Led technical direction for core platform serving 100M+ users
+- Built real-time infrastructure using Python, Go, Kafka, and Redis
+- Designed PostgreSQL sharding strategy supporting 10TB+ of data
+- Collaborated with VPs and product leaders on 2-year roadmap
+
+Senior Engineer — GrowthStartup (2012 - 2015)
+- Early backend engineer, built payment processing system in Python/Django
+- Designed PostgreSQL schema for multi-tenant SaaS application
+- Set up AWS infrastructure and CI/CD pipelines
+
+Software Engineer — First Job Inc (2010 - 2012)
+- Python and Java backend development
+- SQL databases, Linux administration
+
+SKILLS
+Python (expert), Go, Java, Rust
+FastAPI, Django, Flask, gRPC
+PostgreSQL, Redis, Cassandra, DynamoDB, Kafka
+AWS (all services), GCP, Azure
+Kubernetes, Docker, Terraform, Ansible
+System Design, Distributed Systems, Engineering Leadership
+
+EDUCATION
+M.S. Computer Science — Stanford University, 2010
+B.S. Computer Science — MIT, 2008

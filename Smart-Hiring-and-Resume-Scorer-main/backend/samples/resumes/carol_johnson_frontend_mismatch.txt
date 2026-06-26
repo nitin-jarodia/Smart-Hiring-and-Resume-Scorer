@@ -1,0 +1,31 @@
+Carol Johnson
+carol.j@outlook.com | (310) 555-0789
+
+SUMMARY
+Frontend Engineer with 5 years of experience building beautiful, responsive web applications. Specializing in React, TypeScript, and modern CSS. Passionate about UX and design systems.
+
+EXPERIENCE
+
+Senior Frontend Engineer — DesignFirst Agency (2020 - Present)
+- Led frontend architecture for design system used by 8 product teams
+- Built React component library with TypeScript used across company
+- Implemented complex animations using Framer Motion and CSS
+- Integrated REST APIs and GraphQL endpoints from backend teams
+- Reduced bundle size by 45% through code splitting and lazy loading
+- Mentored 3 junior frontend engineers
+
+Frontend Engineer — WebStudio Inc (2019 - 2020)
+- Developed React applications for e-commerce clients
+- Built Next.js websites with server-side rendering for SEO
+- Used TailwindCSS for rapid UI development
+- Collaborated with designers using Figma
+
+SKILLS
+React, TypeScript, Next.js, Vue.js, JavaScript, HTML5, CSS3, TailwindCSS
+GraphQL (client side), REST API consumption
+Webpack, Vite, Node.js (basic)
+Git, GitHub Actions (frontend builds)
+Basic AWS S3/CloudFront for static hosting
+
+EDUCATION
+B.A. Design and Computer Science — UCLA, 2019

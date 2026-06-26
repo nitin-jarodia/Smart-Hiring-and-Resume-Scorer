@@ -1,0 +1,43 @@
+Bob Martinez
+bob.martinez@gmail.com | (737) 555-0384
+
+PROFESSIONAL SUMMARY
+Mid-level backend developer with 4 years of experience building web applications. Comfortable with Python, JavaScript, and SQL. Looking to grow into more infrastructure-focused roles.
+
+WORK EXPERIENCE
+
+Backend Developer — HealthTech Solutions, Austin TX
+2021 – 2024
+• Built REST APIs using Python Django for patient management system
+• Worked with MySQL databases, wrote complex SQL queries
+• Deployed applications on AWS EC2 and S3
+• Used Docker for local development environments
+• Participated in Agile sprint planning and code reviews
+• Collaborated with frontend team using React
+
+Junior Developer — WebAgency, Austin TX
+2020 – 2021
+• Maintained PHP and JavaScript web applications
+• Basic AWS experience with S3 and EC2
+• Wrote unit tests and participated in QA processes
+
+Freelance Developer
+2019 – 2020
+• Built small web apps for local businesses
+• Used Node.js and Express for backend development
+
+TECHNICAL SKILLS
+• Python (Django, Flask)
+• JavaScript, Node.js
+• MySQL, PostgreSQL (basic)
+• AWS (EC2, S3 — limited)
+• Docker
+• Git, GitHub
+• HTML, CSS
+
+EDUCATION
+B.S. Information Technology — Texas State University, 2019
+
+INTERESTS
+• Open source contributions (occasional)
+• Learning Kubernetes

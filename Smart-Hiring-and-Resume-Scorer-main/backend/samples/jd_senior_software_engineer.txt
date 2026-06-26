@@ -1,0 +1,38 @@
+Senior Software Engineer — Platform Infrastructure
+
+About the Role
+We're looking for a Senior Software Engineer to join our Platform Infrastructure team. You'll design, build, and maintain scalable backend systems that power our core product used by 2M+ users daily. You'll collaborate closely with product, design, and data teams.
+
+Requirements (Must Have)
+- 5+ years of professional software engineering experience
+- Strong proficiency in Python and/or Go
+- Extensive experience with AWS (EC2, S3, Lambda, RDS, ECS)
+- PostgreSQL or MySQL — schema design, query optimization, indexing
+- Experience with Docker and Kubernetes for containerization and orchestration
+- REST API design and GraphQL experience
+- Understanding of CI/CD pipelines (GitHub Actions, Jenkins)
+- Strong experience with distributed systems and microservices architecture
+- Experience with Redis for caching and session management
+- Excellent problem-solving skills and ability to lead technical projects
+
+Nice to Have
+- Experience with Kafka or other message queue systems
+- Terraform or infrastructure-as-code experience
+- Open-source contributions
+- Experience with Datadog, Prometheus, or similar observability tools
+- React or TypeScript for occasional full-stack work
+
+Responsibilities
+- Architect and implement high-throughput, fault-tolerant backend services
+- Lead technical design reviews and mentor junior engineers
+- Participate in on-call rotation for production systems
+- Drive infrastructure cost optimization initiatives
+- Write clean, tested, well-documented code
+
+About You
+- You take ownership end-to-end, from design to deployment to monitoring
+- You communicate clearly in writing and in meetings
+- You're comfortable with ambiguity and rapid iteration
+- Bachelor's degree in Computer Science, Engineering, or equivalent experience
+
+We are an equal opportunity employer. Fairness and inclusion are core values.

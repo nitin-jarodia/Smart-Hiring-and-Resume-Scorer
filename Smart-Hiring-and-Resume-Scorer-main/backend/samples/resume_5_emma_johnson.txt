@@ -1,0 +1,54 @@
+Emma Johnson
+emma.johnson.dev@gmail.com | (917) 555-0293 | linkedin.com/in/emmajohnsondev
+
+PROFESSIONAL SUMMARY
+Staff Engineer with 9 years building distributed systems and cloud infrastructure. Former tech lead for platform team serving 50M users. Deep expertise in AWS, Go, Python, and Kubernetes. Passionate about developer experience and engineering culture.
+
+EXPERIENCE
+
+Staff Software Engineer — Shopify (Remote)
+2020 – Present
+• Technical lead for core infrastructure team (8 engineers)
+• Re-architected job processing system using Go microservices and Redis queues, reducing p95 latency from 2s to 180ms and saving $600K/year in cloud costs
+• Designed and implemented multi-cloud failover system (AWS primary, GCP secondary)
+• Led Kubernetes platform migration from ECS, improving deployment frequency by 5x
+• Established CI/CD standards across 40+ engineering teams using GitHub Actions
+• Defined infrastructure-as-code standards with Terraform; reduced provisioning time from days to minutes
+• Mentored 6 engineers; 3 promoted to senior roles under my guidance
+• Drove engineering hiring: conducted 200+ technical interviews
+
+Senior Software Engineer — Twitter/X, New York NY
+2016 – 2020
+• Built real-time data pipeline using Kafka, processing 500K events/second
+• Developed internal developer tooling in Python and Go used by 800+ engineers
+• Operated PostgreSQL clusters with 99.99% uptime
+• Contributed to open-source infrastructure tooling (500+ GitHub stars)
+• On-call rotation for production systems; reduced P1 incident frequency by 40%
+
+Software Engineer — Etsy, Brooklyn NY
+2014 – 2016
+• Developed backend services in Python and PHP
+• Built monitoring dashboards with Datadog and Prometheus
+• Improved test coverage from 40% to 85% on critical payment services
+
+SKILLS
+Languages: Go, Python, TypeScript, SQL, Bash, Rust (learning)
+Cloud: AWS (EC2, Lambda, ECS, RDS, S3, CloudFront, IAM, VPC), GCP, multi-cloud
+Databases: PostgreSQL, MySQL, Redis, MongoDB, DynamoDB
+Infrastructure: Kubernetes, Docker, Terraform, Ansible, Helm
+Observability: Datadog, Prometheus, Grafana, OpenTelemetry
+Messaging: Kafka, RabbitMQ, AWS SQS
+CI/CD: GitHub Actions, Jenkins, ArgoCD
+
+EDUCATION
+B.S. Computer Science — Cornell University, 2014
+Honors Thesis: Distributed Consensus Algorithms
+
+CERTIFICATIONS
+• AWS Certified Solutions Architect — Professional
+• Certified Kubernetes Administrator (CKA)
+• AWS Certified DevOps Engineer
+
+OPEN SOURCE
+• Contributor to Kubernetes (5 merged PRs)
+• Maintainer of "infra-scaffold" — 1.2K GitHub stars

@@ -1,0 +1,39 @@
+Alice Chen
+alice.chen@email.com | (415) 555-0123 | linkedin.com/in/alicechen | github.com/alicechen
+
+SUMMARY
+Senior Backend Engineer with 7 years of experience building scalable distributed systems. Expertise in Python, microservices architecture, and cloud-native development. Led platform teams at Series B and Series D startups. Passionate about developer experience and system reliability.
+
+EXPERIENCE
+
+Senior Backend Engineer — DataFlow Inc (2021 - Present)
+- Led migration of monolithic Python/Django application to microservices architecture, reducing deployment time by 65% and improving system uptime to 99.95%
+- Designed and built real-time data pipeline processing 50M+ events/day using Python FastAPI, Kafka, and PostgreSQL
+- Owned AWS infrastructure using Terraform and Kubernetes, reducing cloud costs by $180K/year
+- Mentored team of 4 junior engineers through weekly 1:1s and code reviews
+- Implemented comprehensive CI/CD pipeline using GitHub Actions, achieving zero-downtime deploys
+
+Backend Engineer — TechVenture Corp (2019 - 2021)
+- Built REST APIs serving 2M+ daily active users using Python Flask and PostgreSQL
+- Implemented Redis caching layer reducing database load by 40%
+- Collaborated with frontend teams to design and document GraphQL APIs
+- Deployed Docker containers to AWS ECS with auto-scaling policies
+
+Software Engineer — StartupXYZ (2017 - 2019)
+- Developed backend services in Python and Node.js for e-commerce platform
+- Maintained PostgreSQL databases, optimized slow queries reducing p99 latency by 3x
+- Set up Jenkins CI/CD pipelines for automated testing and deployment
+
+SKILLS
+Languages: Python (expert), Go (proficient), JavaScript, SQL
+Frameworks: FastAPI, Django, Flask, Express
+Databases: PostgreSQL, Redis, MongoDB, DynamoDB
+Cloud: AWS (EC2, S3, Lambda, RDS, ECS, CloudWatch), GCP basics
+DevOps: Docker, Kubernetes, Terraform, GitHub Actions, Jenkins
+Architecture: Microservices, REST APIs, Event-driven, System Design
+
+EDUCATION
+B.S. Computer Science — UC Berkeley, 2017
+
+CERTIFICATIONS
+AWS Certified Solutions Architect - Associate (2022)

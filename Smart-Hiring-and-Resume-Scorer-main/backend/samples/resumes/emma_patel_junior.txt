@@ -1,0 +1,46 @@
+Emma Patel
+emma.patel@university.edu | (617) 555-0321
+
+OBJECTIVE
+Recent Computer Science graduate seeking backend software engineering role. Strong foundation in Python and databases through coursework and internship experience.
+
+EDUCATION
+B.S. Computer Science — Boston University, 2024
+GPA: 3.8/4.0
+Relevant Coursework: Data Structures, Algorithms, Database Systems, Operating Systems, Software Engineering
+
+EXPERIENCE
+
+Software Engineering Intern — LocalStartup Inc (Summer 2023, 3 months)
+- Developed REST API endpoints using Python Flask and PostgreSQL
+- Fixed 15+ bugs in existing codebase
+- Wrote unit tests using pytest achieving 80% code coverage
+- Used Git and GitHub for version control
+- Participated in daily standups and sprint reviews
+
+Teaching Assistant — Boston University CS Department (2022 - 2024)
+- Assisted professor in teaching Python fundamentals to 60+ students
+- Held office hours and graded assignments
+
+PROJECTS
+
+Task Management API (Python, FastAPI, PostgreSQL, Docker)
+- Built REST API with authentication using JWT
+- Deployed to AWS EC2 with Docker
+- GitHub: github.com/emmapatel/taskapi
+
+Recipe Finder App (Python, Flask, SQLite)
+- Web app with user authentication and recipe database
+- Used Bootstrap for basic frontend
+
+TECHNICAL SKILLS
+Languages: Python, JavaScript, Java, SQL
+Frameworks: Flask, FastAPI (learning), Django (basic)
+Databases: PostgreSQL, SQLite, MySQL
+Tools: Git, Docker (basic), AWS EC2 (basic), Linux
+Testing: pytest, unittest
+
+ACTIVITIES
+Women in Computer Science Club - Vice President
+ACM Club Member
+Hackathon Participant - 2nd place BUHacks 2023

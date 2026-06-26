@@ -1,0 +1,47 @@
+Alice Chen
+alice.chen@email.com | (415) 555-0192 | linkedin.com/in/alicechen | github.com/alicechen
+
+SUMMARY
+Senior Software Engineer with 7 years of experience designing and operating large-scale backend infrastructure. Passionate about distributed systems, cloud-native architectures, and engineering excellence. Led infrastructure cost reduction saving $400K/year at previous role.
+
+EXPERIENCE
+
+Senior Software Engineer — Stripe, San Francisco, CA
+2021 – Present
+• Designed and deployed microservices-based payment processing platform handling 50,000 TPS using Python and Go on AWS ECS
+• Architected multi-region PostgreSQL setup with read replicas, reducing query latency by 60%
+• Led migration from monolith to microservices, coordinating across 6 teams
+• Implemented Kubernetes-based deployment pipeline with zero-downtime deployments
+• Built Redis caching layer reducing database load by 45%
+• Mentored 4 junior engineers through code reviews and architecture pairing sessions
+• Participated in on-call rotation; improved MTTR from 45 min to 12 min
+
+Software Engineer — Lyft, San Francisco, CA
+2018 – 2021
+• Developed high-availability REST APIs in Python (FastAPI/Flask) serving 2M+ daily requests
+• Implemented CI/CD pipelines using GitHub Actions and Jenkins
+• Designed Terraform modules for reproducible AWS infrastructure
+• Built Kafka-based event streaming for real-time data pipeline
+• Optimized PostgreSQL queries, reducing p99 latency from 800ms to 120ms
+
+Software Engineer — Startup Inc., Remote
+2016 – 2018
+• Built full-stack features using Python backend and React + TypeScript frontend
+• Managed AWS infrastructure (EC2, S3, RDS, Lambda)
+• Implemented Docker containerization for consistent dev/prod environments
+
+SKILLS
+Languages: Python, Go, TypeScript, SQL, Bash
+Infrastructure: AWS (EC2, S3, Lambda, ECS, RDS, ElastiCache), GCP, Terraform
+Databases: PostgreSQL, MySQL, Redis, MongoDB
+Tools: Docker, Kubernetes, Kafka, GitHub Actions, Jenkins, Datadog, Prometheus
+Frameworks: FastAPI, Flask, React, Node.js
+Practices: Microservices, CI/CD, Agile/Scrum, TDD
+
+EDUCATION
+B.S. Computer Science — UC Berkeley, 2016
+GPA: 3.8
+
+CERTIFICATIONS
+• AWS Certified Solutions Architect — Associate (2022)
+• Certified Kubernetes Administrator (CKA) — 2023

@@ -1,0 +1,71 @@
+# AI/ML Module Analysis Report: ScreenerAI
+
+## 1. System Architecture & Model Type
+The AI/ML module of ScreenerAI utilizes a **Hybrid Architecture** combining:
+- **Rule-Based/Heuristic Methods:** Regex-based skill extraction, section pattern matching, and seniority estimation.
+- **Embedding-Based Models:** Semantic cosine similarity matching using sentence-transformers (ll-MiniLM-L6-v2) to compare resume text against job descriptions.
+- **LLM-Based Components:** Conditional integration with OpenAI (gpt-3.5-turbo) for generating dynamic resume explanations and rewriting weak bullet points into STAR format.
+
+---
+
+## 2. Technical Breakdown by Component
+
+### A. Resume Text Extraction Logic (parser.py)
+- **PDF Extraction:** Attempts primary extraction using pypdf (via PdfReader). If extraction yields less than 100 characters, it falls back to pdfminer.high_level to handle complex layouts.
+- **DOCX Extraction:** Leverages python-docx to iteratively extract paragraphs and table cell contents.
+- **PII Scrubbing:** Uses regex to mask emails ([EMAIL]) and phone numbers ([PHONE]) before analysis to enforce fairness and mitigate bias.
+
+### B. Section Detection Method (parser.py)
+- **Logic:** Keyword triggering via line-by-line scanning over a predefined dictionary (summary, experience, education, skills, projects, etc.).
+- **Boundary Rules:** Detects sections when a line under 50 characters contains a target keyword (e.g., "work history", "technical skills"). Text following the header is appended to that section until a new header is found.
+
+### C. Job Description Processing (skill_extractor.py)
+- **Required vs. Nice-to-Have:** Uses regex lookaheads to identify "nice-to-have" or "preferred" requirement blocks. Extracts skills from the full JD, then subtracts the "nice-to-have" skills to isolate strict requirements.
+
+### D. Skill Extraction Approach (skill_extractor.py, skills_data.py)
+- **Dictionary Lookups:** Utilizes a highly curated canonical dictionary (SKILL_SYNONYMS containing ~100+ technologies mapping terms like js -> javascript or k8s -> kubernetes).
+- **Pattern Matching:** Sorts skill patterns by length (descending) to match multi-word skills (like "machine learning") before individual words. Applies word-boundary (\b) regex over the lowercased text.
+
+### E. Skill Comparison Logic (skill_extractor.py)
+- **Set Operations:** Converts extracted JD skills and Resume skills to their canonical forms.
+- **Math:** 
+  - Matched Skills = JD n Resume
+  - Missing Skills = JD - Resume
+  - Match Ratio = len(Matched) / len(JD)
+
+### F. Resume Scoring Algorithm (scorer.py)
+A weighted aggregate scoring system (0-100 scale):
+1. **Semantic Similarity (40%):** Cosine similarity between JD embeddings and Resume embeddings (ll-MiniLM-L6-v2 or a deterministic hash-based fallback).
+2. **Skill Match (35%):** Driven directly by the Match Ratio calculated above.
+3. **Experience Alignment (15%):** Regex extraction of "X years" from both JD and Resume. Capped at 100%.
+4. **Education Alignment (5%):** Keyword checks for degrees (achelor, phd, m.s.).
+5. **Formatting/Clarity (5%):** Grants points based on the number of distinct, recognizable sections detected.
+
+### G. Resume Improvement Suggestion Logic (scorer.py, llm.py)
+- **Hybrid Approach:**
+  - **Rule-Based Tips:** Flags missing contact info, missing sections, lack of explicit metrics (searches for numbers/%), and weak action verbs ("helped", "did"). Recommends targeted skills to add based on the Missing Skills matrix.
+  - **LLM-Based Rewrite:** If an OpenAI API key is present, the system extracts 3 weak bullets and prompts GPT-3.5 to rewrite them into the STAR format (Situation, Task, Action, Result).
+
+---
+
+## 3. Data Flow of the AI/ML Pipeline
+1. **Ingest:** User uploads file -> esumes.py saves file.
+2. **Text Processing:** parser.py extracts raw text -> parses section dictionary -> masks PII.
+3. **Embeddings:** embeddings.py generates 384-dimensional vectors for semantic matching.
+4. **Analysis:** skill_extractor.py scans for canonical dictionaries.
+5. **Scoring:** scorer.py applies weights across 5 algorithmic pillars.
+6. **Output:** Complete JSON payload returned with {score, missing_skills, recommendations, breakdown}.
+
+---
+
+## 4. Limitations and Weaknesses
+1. **Rigid Skill Dictionary:** The system relies on a hardcoded dictionary (skills_data.py). If a new technology emerges (e.g., "Bun", "Qwen"), the extractor will completely miss it unless manually appended to the dictionary.
+2. **Experience Extraction Regex Flaws:** parse_years_of_experience aggregates mentioned years. If a candidate says "Worked with Python for 2 years and React for 3 years", it might naively extract "3" instead of bounding the total chronological experience.
+3. **Embedding Fallback:** If sentence-transformers fails to import, the system falls back to a custom _hash_embed logic. While deterministic, this hash completely destroys actual semantic awareness, degrading the 40% semantic score to random noise.
+4. **Section Parsing Vulnerability:** Highly stylized resumes without standard headers (e.g., "My Journey", "Where I've Been") will break the section detector, hurting the Formatting score.
+
+---
+## 5. Summary of Future Improvements Needed
+- Transition to a lightweight **NER (Named Entity Recognition)** model (like spaCy) for skill extraction to dynamically identify unknown skills.
+- Replace simple Regex for Chronological Experience with Date-parsing (calculating Delta between Start Date and End Date across work entries).
+- Ensure a pre-compiled ll-MiniLM-L6-v2 ONNX runtime is explicitly bundled or hosted remotely to prevent the hash fallback entirely.

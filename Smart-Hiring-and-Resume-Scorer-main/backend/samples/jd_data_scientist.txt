@@ -1,0 +1,33 @@
+Data Scientist — Machine Learning & Analytics
+
+About the Role
+Join our growing Data Science team and drive impact through machine learning, predictive modeling, and analytics. You'll work closely with product managers, engineers, and business stakeholders to build models that directly influence our roadmap.
+
+Requirements (Must Have)
+- 3+ years of experience in data science or machine learning roles
+- Proficiency in Python with hands-on experience using pandas, scikit-learn, numpy
+- Experience building and deploying ML models in production
+- Strong SQL skills for data extraction and analysis
+- Experience with deep learning frameworks: TensorFlow or PyTorch
+- Natural language processing (NLP) experience
+- Statistical knowledge: regression, classification, clustering, hypothesis testing
+- Experience with MLflow or similar experiment tracking tools
+- Familiarity with cloud platforms (AWS SageMaker, GCP Vertex AI, or Azure ML)
+- Strong communication skills to present findings to non-technical stakeholders
+- Bachelor's or Master's degree in Data Science, Statistics, Mathematics, or Computer Science
+
+Nice to Have
+- Experience with Spark or distributed data processing
+- Knowledge of Airflow for pipeline orchestration
+- Tableau or Power BI for visualization
+- Published research or Kaggle competition experience
+- Experience with A/B testing and causal inference
+
+Responsibilities
+- Build, train, and deploy ML models for recommendation, fraud detection, and churn prediction
+- Conduct exploratory data analysis and generate insights
+- Collaborate with engineering to productionize models
+- Monitor model drift and retrain pipelines
+- Communicate results clearly through reports and dashboards
+
+Salary Range: $130,000 - $165,000 + equity
