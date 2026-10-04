@@ -145,6 +145,17 @@ class CandidateEmbedding(Base):
     embedding = Column(JSON, nullable=False) # Store float array as JSON safely
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
+class ResumeChunk(Base):
+    __tablename__ = "resume_chunks"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    resume_id = Column(String, ForeignKey("resumes.id"), nullable=True, index=True)
+    candidate_id = Column(String, ForeignKey("candidate_profiles.id"), nullable=True, index=True)
+    section = Column(String, default="")
+    chunk_index = Column(Integer, default=0)
+    text = Column(Text, default="")
+    embedding = Column(JSON, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
 class CandidateGitHub(Base):
     __tablename__ = "candidate_github"
     id = Column(String, primary_key=True, default=gen_uuid)

@@ -18,6 +18,7 @@ from ..ai.skill_extractor import extract_skills_from_text
 from ..ai.scorer import score_resume, generate_resume_tips, analyze_general_profile
 from ..ai.market_trends import get_market_trend_recommendations
 from ..ai.vector_search import update_candidate_embedding
+from ..ai.rag import index_text, grounded_explanation
 from ..config import settings
 
 router = APIRouter(tags=["candidate"])
@@ -93,9 +94,14 @@ async def upload_resume_profile(
     db.commit()
     db.refresh(profile)
 
+    try:
+        index_text(db, profile.extracted_text or "", candidate_id=profile.id)
+    except Exception as e:
+        logger.error(f"Failed to index candidate profile {profile.id}: {e}")
+
     # Automatically generate semantic embedding in background
     if profile.extracted_text:
-        background_tasks.add_task(update_candidate_embedding, db, profile.id, profile.extracted_text)
+        background_tasks.add_task(update_candidate_embedding, profile.id, profile.extracted_text)
 
     return {
         "message": "Resume uploaded successfully",
@@ -174,6 +180,19 @@ def apply_to_job(
             "recommendations": ["Unable to score. Please re-upload your resume."],
         }
 
+    explanation = result.get("explanation", "")
+    try:
+        grounded = grounded_explanation(
+            db,
+            job.jd_text,
+            profile.extracted_text,
+            candidate_id=profile.id,
+        )
+        if grounded.get("answer"):
+            explanation = grounded["answer"]
+    except Exception as e:
+        logger.error(f"RAG explanation failed for candidate {profile.id}: {e}")
+
     # Calculate match percent
     required = set(s.lower() for s in (job.required_skills or []))
     matched = set(s.lower() for s in result.get("matched_skills", []))
@@ -191,7 +210,7 @@ def apply_to_job(
         project_evaluations=result.get("project_evaluations", []),
         fraud_flags=result.get("fraud_flags", []),
         strength_tags=result.get("strength_tags", []),
-        explanation=result.get("explanation", ""),
+        explanation=explanation,
         seniority=result.get("seniority", "Unknown"),
         status="pending",
     )

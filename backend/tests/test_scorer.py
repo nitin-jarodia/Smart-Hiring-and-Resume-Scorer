@@ -13,25 +13,25 @@ WEAK_RESUME = """Emma Patel - Recent graduate. Internship 3 months.
 Skills: Python, Flask, SQLite. Basic Docker."""
 
 def test_strong_resume_scores_high():
-    from app.services.scorer import score_resume
+    from app.ai.scorer import score_resume
     result = score_resume(JD_TEXT, STRONG_RESUME)
     assert result["score"] >= 60
     assert len(result["matched_skills"]) >= 3
 
 def test_weak_resume_scores_lower():
-    from app.services.scorer import score_resume
+    from app.ai.scorer import score_resume
     strong = score_resume(JD_TEXT, STRONG_RESUME)
     weak = score_resume(JD_TEXT, WEAK_RESUME)
     assert strong["score"] > weak["score"]
 
 def test_result_has_required_fields():
-    from app.services.scorer import score_resume
+    from app.ai.scorer import score_resume
     result = score_resume(JD_TEXT, STRONG_RESUME)
     required_keys = ["score", "confidence", "seniority", "breakdown", "matched_skills", "missing_skills"]
     for key in required_keys:
         assert key in result
 
 def test_score_range():
-    from app.services.scorer import score_resume
+    from app.ai.scorer import score_resume
     result = score_resume(JD_TEXT, STRONG_RESUME)
     assert 0 <= result["score"] <= 100

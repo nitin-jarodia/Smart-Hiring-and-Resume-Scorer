@@ -32,6 +32,27 @@ export default function JobDetailPage() {
   const [githubInfo, setGithubInfo] = useState<any>(null)
   const [loadingGithub, setLoadingGithub] = useState(false)
   const [showInterviewModal, setShowInterviewModal] = useState(false)
+  const [question, setQuestion] = useState('')
+  const [asking, setAsking] = useState(false)
+  const [askResult, setAskResult] = useState<any>(null)
+
+  useEffect(() => {
+    setQuestion('')
+    setAskResult(null)
+  }, [selected?.id])
+
+  const askAboutResume = async () => {
+    if (!selected?.id || !question.trim()) return
+    setAsking(true)
+    try {
+      const { data } = await screeningApi.ask(selected.id, question.trim())
+      setAskResult(data)
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Could not answer that question')
+    } finally {
+      setAsking(false)
+    }
+  }
 
   const loadData = async () => {
     try {
@@ -303,8 +324,52 @@ export default function JobDetailPage() {
                       <p className="text-[0.82rem] leading-relaxed text-[var(--text-secondary)] italic">
                         &quot;{selected.explanation}&quot;
                       </p>
+                      {(selected.evidence || []).filter((item: any) => item.skill === 'citation' || item.type === 'citation').length > 0 && (
+                        <div className="mt-3 flex flex-col gap-2">
+                          {(selected.evidence || [])
+                            .filter((item: any) => item.skill === 'citation' || item.type === 'citation')
+                            .map((item: any, i: number) => (
+                              <p key={item.chunk_id || i} className="text-[0.75rem] leading-relaxed text-[var(--text-secondary)] m-0">
+                                <span className="font-semibold text-[var(--text-primary)]">{item.section || 'Resume'}: </span>
+                                {item.excerpt}
+                              </p>
+                            ))}
+                        </div>
+                      )}
                     </div>
                   )}
+
+                  <div className="mb-5">
+                    <h3 className="text-[0.82rem] mb-2 font-semibold">Ask about this resume</h3>
+                    <div className="flex gap-2">
+                      <input
+                        className="input flex-1"
+                        placeholder="Has this person led a production migration?"
+                        value={question}
+                        maxLength={500}
+                        onChange={e => setQuestion(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') askAboutResume() }}
+                      />
+                      <button type="button" className="btn btn-primary shrink-0" onClick={askAboutResume} disabled={asking || !question.trim()}>
+                        {asking ? <div className="spinner" /> : 'Ask'}
+                      </button>
+                    </div>
+                    {askResult && (
+                      <div className="mt-3 p-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)]">
+                        <p className="text-[0.82rem] leading-relaxed text-[var(--text-secondary)] m-0 whitespace-pre-wrap">{askResult.answer}</p>
+                        {askResult.citations?.length > 0 && (
+                          <div className="mt-3 flex flex-col gap-2">
+                            {askResult.citations.map((item: any, i: number) => (
+                              <p key={item.chunk_id || i} className="text-[0.75rem] leading-relaxed text-[var(--text-secondary)] m-0">
+                                <span className="font-semibold text-[var(--text-primary)]">{item.section || 'Resume'}: </span>
+                                {item.excerpt}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Fraud Flags */}
                   {selected.fraud_flags && selected.fraud_flags.length > 0 && (

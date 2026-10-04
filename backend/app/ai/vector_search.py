@@ -6,29 +6,31 @@ from .embeddings import embed_text, cosine_similarity
 
 logger = logging.getLogger(__name__)
 
-def update_candidate_embedding(db: Session, candidate_id: str, text: str):
-    """Generate and safely store a vector embedding for a candidate."""
-    try:
-        if not text or not text.strip():
-            return
+def update_candidate_embedding(candidate_id: str, text: str):
+    """Generate and store a vector embedding using a fresh database session."""
+    if not text or not text.strip():
+        return
 
-        # Generate embedding array
+    from ..database import SessionLocal
+    db = SessionLocal()
+    try:
         emb_array = embed_text(text)
         emb_list = emb_array.tolist()
 
-        # Update or create record
         record = db.query(CandidateEmbedding).filter(CandidateEmbedding.candidate_id == candidate_id).first()
         if record:
             record.embedding = emb_list
         else:
             record = CandidateEmbedding(candidate_id=candidate_id, embedding=emb_list)
             db.add(record)
-        
+
         db.commit()
         logger.info(f"Updated vector embedding for candidate {candidate_id}")
     except Exception as e:
         logger.error(f"Failed to update candidate embedding: {e}")
         db.rollback()
+    finally:
+        db.close()
 
 def search_candidates(db: Session, query: str, top_k: int = 10):
     """Perform a pure NumPy dot-product semantic search safely without FAISS."""

@@ -2,7 +2,7 @@ import pytest
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from app.services.parser import extract_contact_info, detect_sections, parse_years_of_experience, mask_pii
+from app.ai.parser import extract_contact_info, detect_sections, parse_years_of_experience, mask_pii
 
 def test_extract_email():
     text = "John Doe\njohn.doe@example.com\n(555) 123-4567"

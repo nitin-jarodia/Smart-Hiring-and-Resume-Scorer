@@ -1,5 +1,6 @@
 import os
 import uuid
+import logging
 import aiofiles
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
@@ -9,8 +10,10 @@ from ..models.domain import Job, Resume
 from ..models.schemas import ResumeOut
 from ..auth.security import require_recruiter
 from ..ai.parser import extract_text, extract_contact_info, detect_sections
+from ..ai.rag import index_text
 from ..config import settings
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["resumes"])
 
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt"}
@@ -61,6 +64,10 @@ async def upload_resumes(
         db.add(resume)
         db.commit()
         db.refresh(resume)
+        try:
+            index_text(db, extracted_text, resume_id=resume.id)
+        except Exception as e:
+            logger.error(f"Failed to index resume {resume.id}: {e}")
         results.append(ResumeOut.model_validate(resume))
     
     return results

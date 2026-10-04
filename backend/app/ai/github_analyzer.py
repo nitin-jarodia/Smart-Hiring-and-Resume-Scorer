@@ -1,7 +1,6 @@
 import httpx
 import logging
 from typing import Dict, Any
-from sqlalchemy.orm import Session
 from ..models.domain import CandidateGitHub
 
 logger = logging.getLogger(__name__)
@@ -81,7 +80,7 @@ async def fetch_github_data(username: str) -> Dict[str, Any]:
         
     return data
 
-async def analyze_and_store_github(db: Session, candidate_id: str, github_url: str):
+async def analyze_and_store_github(candidate_id: str, github_url: str):
     """Analyze GitHub profile and store/update in DB."""
     # Robustly extract username even from github.com/user/repo URLs
     try:
@@ -112,6 +111,8 @@ async def analyze_and_store_github(db: Session, candidate_id: str, github_url: s
         # Optionally, you could store the error message in the DB if the model supports it.
         return 
         
+    from ..database import SessionLocal
+    db = SessionLocal()
     try:
         record = db.query(CandidateGitHub).filter(CandidateGitHub.candidate_id == candidate_id).first()
         if record:
@@ -119,8 +120,6 @@ async def analyze_and_store_github(db: Session, candidate_id: str, github_url: s
             record.username = username
             record.metrics = github_data["metrics"]
             record.top_languages = github_data["top_languages"]
-            # If there was an error but valid is true (e.g., no repos), we might want to clear previous errors
-            # or store the new error. For now, we assume if valid, we update.
         else:
             record = CandidateGitHub(
                 candidate_id=candidate_id,
@@ -134,3 +133,5 @@ async def analyze_and_store_github(db: Session, candidate_id: str, github_url: s
     except Exception as e:
         db.rollback()
         logger.error(f"Failed handling DB for GitHub analysis: {e}")
+    finally:
+        db.close()

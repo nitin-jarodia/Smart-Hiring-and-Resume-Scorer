@@ -1,7 +1,71 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from ..config import settings
 import logging
 logger = logging.getLogger(__name__)
+
+def answer_from_chunks(question: str, chunks: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Answer from retrieved passages only. Falls back to the excerpts themselves."""
+    citations = [
+        {
+            "chunk_id": chunk.get("id") or "",
+            "section": chunk.get("section") or "",
+            "excerpt": (chunk.get("text") or "")[:500],
+            "similarity": round(float(chunk.get("similarity") or 0), 3),
+        }
+        for chunk in chunks
+    ]
+    excerpt_lines = "\n".join(
+        f"- ({c['section']}) {c['excerpt']}" for c in citations if c["excerpt"]
+    )
+
+    if not citations:
+        return {
+            "answer": "The resume does not say. No indexed passages were available.",
+            "citations": [],
+            "used_llm": False,
+        }
+
+    if not has_openai():
+        return {
+            "answer": "No model key is configured. Relevant resume excerpts:\n" + excerpt_lines,
+            "citations": citations,
+            "used_llm": False,
+        }
+
+    excerpt_block = "\n\n".join(
+        f"[{c['chunk_id']}] ({c['section']}) {c['excerpt']}" for c in citations
+    )
+    prompt = f"""You are a recruiter assistant. Answer using only the excerpts below.
+Cite chunk ids in square brackets when you use them.
+If the excerpts do not contain the answer, say exactly: The resume does not say.
+Do not invent employers, dates, skills, or metrics.
+
+Question:
+{question}
+
+Excerpts:
+{excerpt_block}
+"""
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=350,
+            temperature=0.2,
+        )
+        answer = (response.choices[0].message.content or "").strip()
+        if not answer:
+            answer = "The resume does not say."
+        return {"answer": answer, "citations": citations, "used_llm": True}
+    except Exception as e:
+        logger.error(f"RAG answer failed: {e}")
+        return {
+            "answer": "No model key is configured. Relevant resume excerpts:\n" + excerpt_lines,
+            "citations": citations,
+            "used_llm": False,
+        }
 
 def has_openai() -> bool:
     return bool(settings.OPENAI_API_KEY)

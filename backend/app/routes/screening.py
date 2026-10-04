@@ -6,6 +6,9 @@ from ..models.domain import Job, Resume, Result, Application
 from ..models.schemas import ResultOut, ResultUpdate
 from ..auth.security import require_recruiter
 from ..ai.scorer import score_resume
+from ..ai.rag import grounded_explanation, citation_evidence, ensure_indexed, retrieve
+from ..ai.llm import answer_from_chunks
+from pydantic import BaseModel, Field
 import logging
 logger = logging.getLogger(__name__)
 
@@ -79,6 +82,20 @@ def run_scoring_sync(job_id: str, db: Session):
                 }
             else:
                 result_data = score_resume(job.jd_text, resume.extracted_text, jd_skills)
+                try:
+                    grounded = grounded_explanation(
+                        db,
+                        job.jd_text,
+                        resume.extracted_text,
+                        resume_id=resume.id,
+                    )
+                    if grounded.get("answer"):
+                        result_data["explanation"] = grounded["answer"]
+                    result_data["evidence"] = list(result_data.get("evidence") or []) + citation_evidence(
+                        grounded.get("citations") or []
+                    )
+                except Exception as e:
+                    logger.error(f"RAG explanation failed for resume {resume.id}: {e}")
 
             result = Result(
                 job_id=job_id,
@@ -147,7 +164,6 @@ def get_results(
         if r.resume:
             item.candidate_name = r.resume.candidate_name
             item.candidate_email = r.resume.email
-            item.candidate_id = r.resume.candidate_id
             item.filename = r.resume.filename
         out.append(item)
 
@@ -187,7 +203,6 @@ def update_result(
         if result.resume:
             item.candidate_name = result.resume.candidate_name
             item.candidate_email = result.resume.email
-            item.candidate_id = result.resume.candidate_id
             item.filename = result.resume.filename
         return item
 
@@ -201,3 +216,52 @@ def update_result(
         return _app_to_result_out(app)
 
     raise HTTPException(status_code=404, detail="Result or Application not found")
+
+
+class AskRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=500)
+
+
+def _require_job_owner(job: Job, user) -> None:
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    if user.role != "admin" and job.created_by != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+
+@router.post("/results/{result_id}/ask")
+def ask_result(
+    result_id: str,
+    body: AskRequest,
+    db: Session = Depends(get_db),
+    current_user=Depends(require_recruiter),
+):
+    question = body.question.strip()
+    if not question:
+        raise HTTPException(status_code=400, detail="Question is required")
+
+    result = db.query(Result).filter(Result.id == result_id).first()
+    if result:
+        job = db.query(Job).filter(Job.id == result.job_id).first()
+        _require_job_owner(job, current_user)
+        resume = result.resume
+        text = resume.extracted_text if resume else ""
+        if not text or not text.strip():
+            raise HTTPException(status_code=400, detail="No resume text to search")
+        ensure_indexed(db, text, resume_id=resume.id)
+        hits = retrieve(db, question, resume_id=resume.id, top_k=5)
+        return answer_from_chunks(question, hits)
+
+    app = db.query(Application).filter(Application.id == result_id).first()
+    if not app:
+        raise HTTPException(status_code=404, detail="Result or Application not found")
+
+    job = db.query(Job).filter(Job.id == app.job_id).first()
+    _require_job_owner(job, current_user)
+    profile = app.candidate
+    text = profile.extracted_text if profile else ""
+    if not text or not text.strip():
+        raise HTTPException(status_code=400, detail="No resume text to search")
+    ensure_indexed(db, text, candidate_id=profile.id)
+    hits = retrieve(db, question, candidate_id=profile.id, top_k=5)
+    return answer_from_chunks(question, hits)

@@ -66,6 +66,8 @@ export const screeningApi = {
     api.get(`/jobs/${jobId}/results`, { params }),
   updateResult: (resultId: string, data: object) =>
     api.patch(`/results/${resultId}`, data),
+  ask: (resultId: string, question: string) =>
+    api.post(`/results/${resultId}/ask`, { question }),
 }
 
 // Analytics

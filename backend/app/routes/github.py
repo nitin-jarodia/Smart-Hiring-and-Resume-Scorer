@@ -25,7 +25,7 @@ async def submit_github_profile(
         raise HTTPException(status_code=400, detail="Please upload a resume first")
         
     # Start analysis task
-    background_tasks.add_task(analyze_and_store_github, db, profile.id, req.github_url)
+    background_tasks.add_task(analyze_and_store_github, profile.id, req.github_url)
     
     return {"message": "GitHub profile linking started in the background"}
 
