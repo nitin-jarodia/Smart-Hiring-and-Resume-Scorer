@@ -6,9 +6,10 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
 from ..database import get_db
-from ..models.domain import Job, Resume
+from ..models.domain import Resume
 from ..models.schemas import ResumeOut
 from ..auth.security import require_recruiter
+from ..auth.ownership import get_job_for_user, get_resume_for_user
 from ..ai.parser import extract_text, extract_contact_info, detect_sections
 from ..ai.rag import index_text
 from ..config import settings
@@ -26,10 +27,8 @@ async def upload_resumes(
     db: Session = Depends(get_db),
     current_user=Depends(require_recruiter),
 ):
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
+    get_job_for_user(db, job_id, current_user)
+
     results = []
     for file in files:
         ext = os.path.splitext(file.filename)[1].lower()
@@ -74,21 +73,18 @@ async def upload_resumes(
 
 @router.get("/jobs/{job_id}/resumes", response_model=List[ResumeOut])
 def list_resumes(job_id: str, db: Session = Depends(get_db), current_user=Depends(require_recruiter)):
+    get_job_for_user(db, job_id, current_user)
     resumes = db.query(Resume).filter(Resume.job_id == job_id).all()
     return [ResumeOut.model_validate(r) for r in resumes]
 
 @router.get("/resumes/{resume_id}", response_model=ResumeOut)
 def get_resume(resume_id: str, db: Session = Depends(get_db), current_user=Depends(require_recruiter)):
-    resume = db.query(Resume).filter(Resume.id == resume_id).first()
-    if not resume:
-        raise HTTPException(status_code=404, detail="Resume not found")
+    resume = get_resume_for_user(db, resume_id, current_user)
     return ResumeOut.model_validate(resume)
 
 @router.delete("/resumes/{resume_id}")
 def delete_resume(resume_id: str, db: Session = Depends(get_db), current_user=Depends(require_recruiter)):
-    resume = db.query(Resume).filter(Resume.id == resume_id).first()
-    if not resume:
-        raise HTTPException(status_code=404, detail="Resume not found")
+    resume = get_resume_for_user(db, resume_id, current_user)
     if os.path.exists(resume.file_path):
         os.remove(resume.file_path)
     db.delete(resume)

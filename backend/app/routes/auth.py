@@ -13,11 +13,12 @@ def signup(data: UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
+    # Admin accounts are never self-service: they are seeded or promoted by an admin.
     user = User(
         email=data.email,
         hashed_password=get_password_hash(data.password),
         full_name=data.full_name or "",
-        role=data.role if data.role in ["admin", "recruiter", "candidate"] else "recruiter"
+        role=data.role if data.role in ["recruiter", "candidate"] else "recruiter"
     )
     db.add(user)
     db.commit()

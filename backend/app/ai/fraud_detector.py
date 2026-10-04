@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from typing import List, Dict
 
 def detect_resume_fraud(text: str, skills: List[str]) -> List[Dict[str, str]]:
@@ -65,7 +66,7 @@ def detect_resume_fraud(text: str, skills: List[str]) -> List[Dict[str, str]]:
             match = re.search(rf'(\d+)\+?\s*(?:years|yrs)\s*(?:of\s*experience)?\s*(?:in|with|using)?\s*.*?\b{re.escape(tech)}\b', text_lower)
             if match:
                 years_claimed = int(match.group(1))
-                current_year = 2024 # Context year
+                current_year = datetime.now().year
                 max_possible = current_year - year + 1 # +1 gives them benefit of doubt
                 if years_claimed > max_possible:
                     flags.append({

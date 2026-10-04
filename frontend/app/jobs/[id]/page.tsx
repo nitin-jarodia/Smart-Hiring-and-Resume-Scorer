@@ -274,46 +274,51 @@ export default function JobDetailPage() {
                     </div>
                   )}
 
-                  {/* GitHub Statistics *                    {(() => {
-                      const m = typeof githubInfo.metrics === 'string' ? JSON.parse(githubInfo.metrics) : (githubInfo.metrics || {});
-                      const t = m.top_projects || [];
-                      return (
-                        <div className="mb-5 p-4 bg-[#0d1117] text-white rounded-xl border border-[#30363d]">
-                          <h3 className="text-[0.82rem] mb-3 flex items-center gap-2 font-semibold text-gray-200">
-                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3-.3 6-1.5 6-6.5a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 5 3 6.2 6 6.5a4.8 4.8 0 0 0-1 3.2v4"></path></svg>
-                            GitHub OSS Activity
-                          </h3>
-                          <div className="grid grid-cols-3 gap-2 mb-4">
-                            <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
-                              <div className="text-lg font-bold text-white leading-tight">{m.public_repos || 0}</div>
-                              <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Repos</div>
-                            </div>
-                            <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
-                              <div className="text-lg font-bold text-white leading-tight">{m.followers || 0}</div>
-                              <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Followers</div>
-                            </div>
-                            <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
-                              <div className="text-lg font-bold text-white leading-tight">{m.total_stars || 0}</div>
-                              <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Stars</div>
+                  {/* GitHub Statistics */}
+                  {loadingGithub && (
+                    <div className="mb-5 flex items-center gap-2 text-[0.78rem] text-[var(--text-muted)]">
+                      <Loader2 size={14} className="animate-spin" /> Loading GitHub activity...
+                    </div>
+                  )}
+                  {!loadingGithub && githubInfo?.has_github && (() => {
+                    const m = typeof githubInfo.metrics === 'string' ? JSON.parse(githubInfo.metrics) : (githubInfo.metrics || {});
+                    const t = m.top_projects || [];
+                    return (
+                      <div className="mb-5 p-4 bg-[#0d1117] text-white rounded-xl border border-[#30363d]">
+                        <h3 className="text-[0.82rem] mb-3 flex items-center gap-2 font-semibold text-gray-200">
+                          <Github size={16} />
+                          GitHub OSS Activity
+                        </h3>
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
+                            <div className="text-lg font-bold text-white leading-tight">{m.public_repos || 0}</div>
+                            <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Repos</div>
+                          </div>
+                          <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
+                            <div className="text-lg font-bold text-white leading-tight">{m.followers || 0}</div>
+                            <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Followers</div>
+                          </div>
+                          <div className="text-center p-2 bg-[#161b22] rounded border border-[#30363d]">
+                            <div className="text-lg font-bold text-white leading-tight">{m.total_stars || 0}</div>
+                            <div className="text-[0.6rem] uppercase tracking-wider text-gray-400 mt-1">Stars</div>
+                          </div>
+                        </div>
+                        {t.length > 0 && (
+                          <div className="space-y-2 mt-4 pt-4 border-t border-[#30363d]">
+                            <p className="text-[0.7rem] text-gray-400 font-semibold uppercase tracking-widest">Top Repositories</p>
+                            <div className="grid gap-2">
+                              {t.map((p: any) => (
+                                <div key={p.name} className="flex justify-between items-center text-[0.78rem]">
+                                  <a href={p.url} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline truncate max-w-[170px] font-medium">{p.name}</a>
+                                  <span className="text-gray-500 font-mono text-[0.7rem] flex items-center gap-1">{p.stars} stars</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                          {t.length > 0 && (
-                            <div className="space-y-2 mt-4 pt-4 border-t border-[#30363d]">
-                              <p className="text-[0.7rem] text-gray-400 font-semibold uppercase tracking-widest">Top Repositories</p>
-                              <div className="grid gap-2">
-                                {t.map((p: any) => (
-                                  <div key={p.name} className="flex justify-between items-center text-[0.78rem]">
-                                    <a href={p.url} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline truncate max-w-[170px] font-medium">{p.name}</a>
-                                    <span className="text-gray-500 font-mono text-[0.7rem] flex items-center gap-1">⭐ {p.stars}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
-  )}
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* AI Narrative Explanation */}
                   {selected.explanation && (

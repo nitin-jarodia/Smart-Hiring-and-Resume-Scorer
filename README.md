@@ -65,13 +65,20 @@ docker compose up --build
 
 ### Backend `.env`
 
-| Variable           | Default                        | Description                         |
-| ------------------ | ------------------------------ | ----------------------------------- |
-| `SECRET_KEY`       | dev-key                        | JWT secret — change in production   |
-| `DATABASE_URL`     | sqlite:///./resume_screener.db | SQLite (dev) or PostgreSQL (prod)   |
-| `OPENAI_API_KEY`   | (empty)                        | Optional — enables LLM explanations |
-| `UPLOAD_DIR`       | ./uploads                      | Resume file storage                 |
-| `MAX_FILE_SIZE_MB` | 10                             | Max upload size                     |
+| Variable              | Default                             | Description                                                     |
+| --------------------- | ----------------------------------- | --------------------------------------------------------------- |
+| `SECRET_KEY`          | dev-key                             | JWT secret — change in production                                |
+| `DATABASE_URL`        | sqlite:///./resume_screener.db      | SQLite (dev) or PostgreSQL (prod)                                |
+| `OPENAI_API_KEY`      | (empty)                             | Optional — enables grounded RAG answers                          |
+| `UPLOAD_DIR`          | ./uploads                           | Resume file storage                                              |
+| `MAX_FILE_SIZE_MB`    | 10                                  | Max upload size                                                  |
+| `CORS_ORIGINS`        | http://localhost:3000,:3001         | Comma-separated browser origins allowed to call the API          |
+| `SEED_ADMIN_EMAIL`    | admin@screener.dev                  | Email for the seeded admin account                               |
+| `SEED_ADMIN_PASSWORD` | (empty)                             | Required to seed an admin once `SECRET_KEY` is not the dev value |
+
+> The default `admin@screener.dev` / `admin123` account is only created while `SECRET_KEY`
+> is the development default. Once you set a real `SECRET_KEY`, set `SEED_ADMIN_PASSWORD`
+> to create the first admin. Admin accounts can never be created through `/auth/signup`.
 
 ### Frontend `.env.local`
 

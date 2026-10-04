@@ -5,6 +5,7 @@ from ..database import get_db
 from ..models.domain import Job, Resume, Result, Application
 from ..models.schemas import ResultOut, ResultUpdate
 from ..auth.security import require_recruiter
+from ..auth.ownership import get_job_for_user
 from ..ai.scorer import score_resume
 from ..ai.rag import grounded_explanation, citation_evidence, ensure_indexed, retrieve
 from ..ai.llm import answer_from_chunks
@@ -89,7 +90,9 @@ def run_scoring_sync(job_id: str, db: Session):
                         resume.extracted_text,
                         resume_id=resume.id,
                     )
-                    if grounded.get("answer"):
+                    # Keep the template narrative when no model is configured; the
+                    # retrieved passages are still attached as citations.
+                    if grounded.get("used_llm") and grounded.get("answer"):
                         result_data["explanation"] = grounded["answer"]
                     result_data["evidence"] = list(result_data.get("evidence") or []) + citation_evidence(
                         grounded.get("citations") or []
@@ -131,9 +134,7 @@ async def screen_resumes(
     db: Session = Depends(get_db),
     current_user=Depends(require_recruiter),
 ):
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+    get_job_for_user(db, job_id, current_user)
 
     resume_count = db.query(Resume).filter(Resume.job_id == job_id).count()
     if resume_count == 0:
@@ -151,6 +152,8 @@ def get_results(
     db: Session = Depends(get_db),
     current_user=Depends(require_recruiter),
 ):
+    get_job_for_user(db, job_id, current_user)
+
     # 1. Recruiter-uploaded resumes
     query = db.query(Result).filter(Result.job_id == job_id)
     if status:
@@ -191,6 +194,7 @@ def update_result(
     # Try recruiter-uploaded Result first
     result = db.query(Result).filter(Result.id == result_id).first()
     if result:
+        get_job_for_user(db, result.job_id, current_user)
         if data.status is not None:
             result.status = data.status
         if data.notes is not None:
@@ -209,6 +213,7 @@ def update_result(
     # Try candidate Application
     app = db.query(Application).filter(Application.id == result_id).first()
     if app:
+        get_job_for_user(db, app.job_id, current_user)
         if data.status is not None:
             app.status = data.status
         db.commit()
@@ -220,13 +225,6 @@ def update_result(
 
 class AskRequest(BaseModel):
     question: str = Field(min_length=1, max_length=500)
-
-
-def _require_job_owner(job: Job, user) -> None:
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    if user.role != "admin" and job.created_by != user.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
 
 
 @router.post("/results/{result_id}/ask")
@@ -242,8 +240,7 @@ def ask_result(
 
     result = db.query(Result).filter(Result.id == result_id).first()
     if result:
-        job = db.query(Job).filter(Job.id == result.job_id).first()
-        _require_job_owner(job, current_user)
+        get_job_for_user(db, result.job_id, current_user)
         resume = result.resume
         text = resume.extracted_text if resume else ""
         if not text or not text.strip():
@@ -256,8 +253,7 @@ def ask_result(
     if not app:
         raise HTTPException(status_code=404, detail="Result or Application not found")
 
-    job = db.query(Job).filter(Job.id == app.job_id).first()
-    _require_job_owner(job, current_user)
+    get_job_for_user(db, app.job_id, current_user)
     profile = app.candidate
     text = profile.extracted_text if profile else ""
     if not text or not text.strip():

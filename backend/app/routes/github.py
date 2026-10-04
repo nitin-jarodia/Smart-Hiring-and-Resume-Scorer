@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from ..database import get_db
 from ..models.domain import User, CandidateGitHub, CandidateProfile
 from ..auth.security import get_current_user, require_candidate
+from ..auth.ownership import require_candidate_profile_access
 from ..ai.github_analyzer import analyze_and_store_github
 
 router = APIRouter(tags=["github"])
@@ -36,6 +37,7 @@ def get_candidate_github(
     current_user: User = Depends(get_current_user),
 ):
     """Retrieve GitHub stats for a specific candidate."""
+    require_candidate_profile_access(db, candidate_id, current_user)
     gh = db.query(CandidateGitHub).filter(CandidateGitHub.candidate_id == candidate_id).first()
     if not gh:
         return {"has_github": False}

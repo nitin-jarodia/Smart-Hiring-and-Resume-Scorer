@@ -6,12 +6,14 @@ from ..database import get_db
 from ..models.domain import Job, Resume, Result, User
 
 from ..auth.security import get_current_user, require_admin, require_recruiter
+from ..auth.ownership import get_job_for_user
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
 @router.get("/jobs/{job_id}")
 def job_analytics(job_id: str, db: Session = Depends(get_db), current_user: User = Depends(require_recruiter)):
     from ..models.domain import Application
+    get_job_for_user(db, job_id, current_user)
     results = db.query(Result).filter(Result.job_id == job_id).all()
     apps = db.query(Application).filter(Application.job_id == job_id).all()
 

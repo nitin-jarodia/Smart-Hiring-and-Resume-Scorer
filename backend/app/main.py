@@ -19,19 +19,38 @@ async def lifespan(app: FastAPI):
     logger.info("ScreenerAI API starting up...")
     from .database import SessionLocal
     from .auth.security import get_password_hash
+
+    if settings.is_dev_secret:
+        logger.warning(
+            "SECRET_KEY is still the development default. "
+            "Set SECRET_KEY to a random secret before deploying."
+        )
+
+    # Seed an admin only when one is explicitly configured, or while running on the
+    # development secret. A deployment with a real SECRET_KEY never gets a default login.
+    seed_password = settings.SEED_ADMIN_PASSWORD
+    if not seed_password and settings.is_dev_secret:
+        seed_password = "admin123"
+
     db = SessionLocal()
     try:
-        admin = db.query(User).filter(User.email == "admin@screener.dev").first()
-        if not admin:
-            db.add(User(
-                email="admin@screener.dev",
-                hashed_password=get_password_hash("admin123"),
-                full_name="Admin User",
-                role="admin",
-            ))
+        if not db.query(AppSettings).filter(AppSettings.id == 1).first():
             db.add(AppSettings(id=1, retention_days=90, fairness_guardrails=True))
             db.commit()
-            logger.info("Created default admin: admin@screener.dev / admin123")
+
+        if seed_password:
+            admin = db.query(User).filter(User.email == settings.SEED_ADMIN_EMAIL).first()
+            if not admin:
+                db.add(User(
+                    email=settings.SEED_ADMIN_EMAIL,
+                    hashed_password=get_password_hash(seed_password),
+                    full_name="Admin User",
+                    role="admin",
+                ))
+                db.commit()
+                logger.info(f"Created admin account: {settings.SEED_ADMIN_EMAIL}")
+        else:
+            logger.info("No SEED_ADMIN_PASSWORD set; skipping default admin creation.")
     except Exception as e:
         logger.error(f"Startup error: {e}")
         db.rollback()
@@ -48,7 +67,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001", "*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

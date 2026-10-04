@@ -6,15 +6,17 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - SECRET_KEY=change-me-in-production-please
-      - DATABASE_URL=sqlite:///./resume_screener.db
-      - UPLOAD_DIR=./uploads
+      - SECRET_KEY=${SECRET_KEY:?set SECRET_KEY to a random secret}
+      - DATABASE_URL=sqlite:////app/data/resume_screener.db
+      - UPLOAD_DIR=/app/uploads
+      - CORS_ORIGINS=http://localhost:3000
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - SEED_ADMIN_PASSWORD=${SEED_ADMIN_PASSWORD:-}
     volumes:
       - backend_data:/app/uploads
-      - backend_db:/app
+      - backend_db:/app/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 10s
       retries: 3

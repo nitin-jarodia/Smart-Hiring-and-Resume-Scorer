@@ -5,6 +5,7 @@ from ..database import get_db
 from ..models.domain import Job, Application
 from ..models.schemas import JobCreate, JobOut
 from ..auth.security import require_recruiter
+from ..auth.ownership import get_job_for_user
 from ..ai.skill_extractor import extract_skills_from_text, extract_required_skills_from_jd
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
@@ -71,20 +72,14 @@ def list_public_jobs(db: Session = Depends(get_db)):
 
 @router.get("/{job_id}", response_model=JobOut)
 def get_job(job_id: str, db: Session = Depends(get_db), current_user=Depends(require_recruiter)):
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+    job = get_job_for_user(db, job_id, current_user)
     out = JobOut.model_validate(job)
     out.resume_count = len(job.resumes)
     return out
 
 @router.delete("/{job_id}")
 def delete_job(job_id: str, db: Session = Depends(get_db), current_user=Depends(require_recruiter)):
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    if job.created_by != current_user.id and current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not authorized")
+    job = get_job_for_user(db, job_id, current_user)
     db.delete(job)
     db.commit()
     return {"message": "Job deleted"}

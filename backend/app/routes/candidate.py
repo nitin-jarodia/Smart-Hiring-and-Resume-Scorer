@@ -188,7 +188,8 @@ def apply_to_job(
             profile.extracted_text,
             candidate_id=profile.id,
         )
-        if grounded.get("answer"):
+        # Keep the template narrative when no model is configured.
+        if grounded.get("used_llm") and grounded.get("answer"):
             explanation = grounded["answer"]
     except Exception as e:
         logger.error(f"RAG explanation failed for candidate {profile.id}: {e}")

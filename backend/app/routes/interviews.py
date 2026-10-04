@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 from ..database import get_db
 from ..models.domain import User, Application, Interview, Job, Result
 from ..auth.security import get_current_user, require_recruiter
+from ..auth.ownership import get_job_for_user, require_result_access
 
 router = APIRouter(prefix="/interviews", tags=["Interviews"])
 
@@ -46,10 +47,12 @@ def schedule_interview(data: InterviewCreate, db: Session = Depends(get_db), use
     record = db.query(Result).filter(Result.id == data.result_id).first()
     if not record:
         record = db.query(Application).filter(Application.id == data.result_id).first()
-        
+
     if not record:
         raise HTTPException(status_code=404, detail="Application or Result not found")
-        
+
+    get_job_for_user(db, record.job_id, user)
+
     interview = Interview(**data.model_dump())
     db.add(interview)
     
@@ -62,6 +65,7 @@ def schedule_interview(data: InterviewCreate, db: Session = Depends(get_db), use
 
 @router.get("/result/{res_id}", response_model=List[InterviewOut])
 def get_interviews_for_result(res_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    require_result_access(db, res_id, user)
     return db.query(Interview).filter(Interview.result_id == res_id).order_by(Interview.scheduled_at).all()
 
 @router.get("/my-interviews", response_model=List[InterviewOut])
@@ -99,7 +103,9 @@ def update_interview(interview_id: str, data: InterviewUpdate, db: Session = Dep
     interview = db.query(Interview).filter(Interview.id == interview_id).first()
     if not interview:
         raise HTTPException(status_code=404, detail="Interview not found")
-        
+
+    require_result_access(db, interview.result_id, user)
+
     update_data = data.model_dump(exclude_unset=True)
     for key, val in update_data.items():
         setattr(interview, key, val)
